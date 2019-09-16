@@ -4,7 +4,8 @@
             [schema.core :as s]
             [clojure.java.io :as io]
             [clojure-csv.core :as csv]
-            [semantic-csv.core :as sc]))
+            [semantic-csv.core :as sc]
+            [clj-http.client :as http-client]))
 
 (s/defschema Pizza
   {:name s/Str
@@ -23,6 +24,11 @@
    :version s/Str
    :license s/Str
    :vulnerabilities [PackageVulnerability]})
+
+(s/defschema PackageReleases
+  {:name s/Str
+   :latest s/Str
+   :releases [s/Str]})
 
 (defn find-package-vulnerabilities
   [package_name version]
@@ -56,6 +62,33 @@
        :license license
        :vulnerabilities (map #(select-keys % [:id :description :created]) vulnerabilities)})))
 
+(defn build-package-releases
+  [package_name]
+  (let [request_url (str "https://registry.npmjs.org/" package_name)]
+
+    (try
+      ;application/vnd.npm.install-v1+json
+      (let [response (http-client/get request_url {:throw-entire-message? true
+                                                   :accept :json
+                                                   :as :json})]
+
+        {:name package_name
+         :latest (get-in response [:body :dist-tags :latest])
+         :releases  (map #((second %) :version) (get-in response [:body :versions]))})
+
+      (catch Exception e
+        (str "oh no" e)
+        nil))
+
+
+
+    )
+
+
+
+
+  )
+
 (def app
   (api
     {:swagger
@@ -75,11 +108,16 @@
           (ok package_health)
           (not-found (str "There were no vulnerabilities found for package_name " package_name " version " version))))
 
-      (POST "/echo" []
-        :return Pizza
-        :body [pizza Pizza]
-        :summary "echoes a Pizza"
-        (ok pizza)))
+      (GET "/package/releases/:package_name" []
+        :return PackageReleases
+        :path-params [package_name :- s/Str]
+        :summary "a list of the versions available from npm (from the versions in the response from npmjs) and latest should be the most recently published version based on looking at the values of the time dictionary in the response from npmjs"
+        (if-let [package_releases (build-package-releases package_name)]
+          (ok package_releases)
+          (not-found (str "There were no releases found for package_name " package_name))))
+
+
+      )
 
     ))
 
