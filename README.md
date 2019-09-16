@@ -1,8 +1,8 @@
 # tidelift-api
 
-FIXME
+Instructions: https://gist.github.com/katzj/7f2a895efa485084074b492b4af88560
 
-## Usage
+
 
 ### Run the application locally
 
@@ -18,7 +18,3 @@ java -jar target/server.jar
 ### Packaging as war
 
 `lein ring uberwar`
-
-## License
-
-Copyright ©  FIXME
