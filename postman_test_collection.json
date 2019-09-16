@@ -1,0 +1,363 @@
+{
+	"info": {
+		"_postman_id": "0e663923-8638-475c-bb7d-ade73debde35",
+		"name": "Tidelift API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "package",
+			"item": [
+				{
+					"name": "VALID /package/health/:package_name/:version",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "92535fa4-8475-4676-a086-2b8b5b5523dc",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql(\"dummy\");",
+									"    pm.expect(jsonData.version).to.eql(\"0.9\");",
+									"    pm.expect(jsonData.license).to.eql(\"MIT\");",
+									"    pm.expect(jsonData.vulnerabilities[0][\"id\"]).to.eql(\"v2017-001\");",
+									"    pm.expect(jsonData.vulnerabilities[0][\"description\"]).to.eql(\"this is a dummy cve\");",
+									"    pm.expect(jsonData.vulnerabilities[0][\"created\"]).to.eql(\"1504558984\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/package/health/:package_name/:version",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"package",
+								"health",
+								":package_name",
+								":version"
+							],
+							"variable": [
+								{
+									"key": "package_name",
+									"value": "dummy",
+									"description": "sample valid package_name"
+								},
+								{
+									"key": "version",
+									"value": "0.9",
+									"description": "sample valid version"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/package/health/<string>/<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"package",
+										"health",
+										"<string>",
+										"<string>"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"name\": \"<string>\",\n \"version\": \"<string>\",\n \"license\": \"<string>\",\n \"vulnerabilities\": [\n  {\n   \"id\": \"<string>\",\n   \"description\": \"<string>\",\n   \"created\": \"<string>\"\n  },\n  {\n   \"id\": \"<string>\",\n   \"description\": \"<string>\",\n   \"created\": \"<string>\"\n  }\n ]\n}"
+						}
+					]
+				},
+				{
+					"name": "INVALID /package/health/:package_name/:version",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "92535fa4-8475-4676-a086-2b8b5b5523dc",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql(\"dummy\");",
+									"    pm.expect(jsonData.version).to.eql(\"0.9\");",
+									"    pm.expect(jsonData.license).to.eql(\"MIT\");",
+									"    pm.expect(jsonData.vulnerabilities[0][\"id\"]).to.eql(\"v2017-001\");",
+									"    pm.expect(jsonData.vulnerabilities[0][\"description\"]).to.eql(\"this is a dummy cve\");",
+									"    pm.expect(jsonData.vulnerabilities[0][\"created\"]).to.eql(\"1504558984\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/package/health/:package_name/:version",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"package",
+								"health",
+								":package_name",
+								":version"
+							],
+							"variable": [
+								{
+									"key": "package_name",
+									"value": "dummy",
+									"description": "sample package_name"
+								},
+								{
+									"key": "version",
+									"value": "0.9",
+									"description": "sample_version"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/package/health/<string>/<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"package",
+										"health",
+										"<string>",
+										"<string>"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"name\": \"<string>\",\n \"version\": \"<string>\",\n \"license\": \"<string>\",\n \"vulnerabilities\": [\n  {\n   \"id\": \"<string>\",\n   \"description\": \"<string>\",\n   \"created\": \"<string>\"\n  },\n  {\n   \"id\": \"<string>\",\n   \"description\": \"<string>\",\n   \"created\": \"<string>\"\n  }\n ]\n}"
+						}
+					]
+				},
+				{
+					"name": "VALID /package/releases/:package_name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2f88923f-c5e2-45d4-80ba-8a51df5cdfa6",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql(\"cat\");",
+									"    pm.expect(jsonData.latest).to.eql(\"0.2.0\");",
+									"    pm.expect(jsonData.releases[0]).to.eql(\"0.1.0\");",
+									"    pm.expect(jsonData.releases[1]).to.eql(\"0.1.1\");",
+									"    pm.expect(jsonData.releases[2]).to.eql(\"0.2.0\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/package/releases/:package_name",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"package",
+								"releases",
+								":package_name"
+							],
+							"variable": [
+								{
+									"key": "package_name",
+									"value": "cat",
+									"description": "sample valid package_name"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/package/releases/<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"package",
+										"releases",
+										"<string>"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"name\": \"<string>\",\n \"latest\": \"<string>\",\n \"releases\": [\n  \"<string>\",\n  \"<string>\"\n ]\n}"
+						}
+					]
+				},
+				{
+					"name": "INVALID /package/releases/:package_name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2f88923f-c5e2-45d4-80ba-8a51df5cdfa6",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"var body_response = \"There were no releases found for package_name\" + pm.iterationData.get(\"package_name\")",
+									"",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.eq(body_response);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/package/releases/:package_name",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"package",
+								"releases",
+								":package_name"
+							],
+							"variable": [
+								{
+									"description": "sample invalid package_name",
+									"key": "package_name",
+									"value": "catters"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/package/releases/<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"package",
+										"releases",
+										"<string>"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"name\": \"<string>\",\n \"latest\": \"<string>\",\n \"releases\": [\n  \"<string>\",\n  \"<string>\"\n ]\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"id": "baseUrl",
+			"key": "baseUrl",
+			"value": "/",
+			"type": "string"
+		}
+	]
+}
