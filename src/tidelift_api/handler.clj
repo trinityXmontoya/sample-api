@@ -5,7 +5,9 @@
             [clojure.java.io :as io]
             [clojure-csv.core :as csv]
             [semantic-csv.core :as sc]
-            [clj-http.client :as http-client]))
+            [clj-http.client :as http-client]
+            [clojure.tools.logging :as log]
+            [ring.middleware.gzip :as ring-middleware]))
 
 ; ------------
 ; SWAGGER DEFINITION
@@ -36,7 +38,7 @@
    :releases [s/Str]})
 
 ; ------------
-; HELPER FNS
+; CSV FNS
 ; ------------
 (defn filter-csv
   "reads the CSV at the given path into a lazy sequence of rows mapped to the given headers.
@@ -63,6 +65,7 @@
 
 (defn find-package-vulnerabilities
   [package_name version]
+  (log/debug "Searching" vulnerabilities_csv_path "for" {:package_name package_name :version version})
   (filter-csv
     vulnerabilities_csv_path
     vulnerabilities_csv_headers
@@ -80,6 +83,7 @@
 
 (defn find-package-license-info
   [package_name]
+  (log/debug "Searching" licenses_csv_path "for" {:package_name package_name})
   (first
     (filter-csv
       licenses_csv_path
@@ -99,17 +103,13 @@
   [package_name]
   (let [request_url (str npm_registry_url package_name)]
     (try
+      (log/debug "Making GET request" {:request_url request_url :headers npm_registry_headers})
       (let [response (http-client/get request_url npm_registry_headers)]
+        (log/debug "Call succeeded" {:response response})
         (response :body))
       (catch Exception e
-        (str "oh no" e)
+        (log/error "Call failed" {:exception e})
         nil))))
-
-(defn format-npm-release-info
-  [package_name npm_release_info]
-  {:name package_name
-   :latest (get-in npm_release_info [:dist-tags :latest])
-   :releases  (map #((second %) :version) (get npm_release_info :versions))})
 
 ; ------------
 ; PACKAGE HEALTH
@@ -124,6 +124,7 @@
 
 (defn build-package-health
   [package_name version]
+  (log/debug "Attempting to build PackageHealth for" {:package_name package_name :version version})
   (if-let [formatted-license (format-license-info (find-package-license-info package_name))]
     (if-let [formatted-vulnerabilities (format-vulnerabilities (find-package-vulnerabilities package_name version))]
       {:name package_name
@@ -132,17 +133,24 @@
        :vulnerabilities formatted-vulnerabilities})))
 
 ; ------------
-; RELEASES
+; PACKAGE RELEASES
 ; ------------
+(defn format-release-info
+  [package_name npm_release_info]
+  {:name package_name
+   :latest (get-in npm_release_info [:dist-tags :latest])
+   :releases  (map #((second %) :version) (get npm_release_info :versions))})
+
 (defn build-package-releases
   [package_name]
+  (log/debug "Attempting to build PackageHealth for" {:package_name package_name})
   (if-let [npm_release_info (get_npm_release_info package_name)]
-    (format-npm-release-info package_name npm_release_info)))
+    (format-release-info package_name npm_release_info)))
 
 ; ------------
 ; MAIN
 ; ------------
-(def app
+(def handler
   (api
     swagger-definition
     (context "/" []
@@ -165,3 +173,7 @@
           (if-let [package_releases (build-package-releases package_name)]
             (ok package_releases)
             (not-found (str "There were no releases found for package_name " package_name))))))))
+
+(def app
+  (-> handler
+      (ring-middleware/wrap-gzip)))
