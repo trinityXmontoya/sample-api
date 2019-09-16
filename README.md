@@ -15,3 +15,9 @@ Instructions: https://gist.github.com/katzj/7f2a895efa485084074b492b4af88560
 lein do clean, ring uberjar
 java -jar target/server.jar
 ```
+
+### Notes
+
+
+Uses [Compojure API](https://github.com/metosin/compojure-api) which autogenerates interactive Swagger 2.0 docs which you can
+view at http://localhost:3001
